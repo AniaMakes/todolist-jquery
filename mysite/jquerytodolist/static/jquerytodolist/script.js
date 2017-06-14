@@ -54,6 +54,6 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
-    alert(first_todo_id);
+    // alert(first_todo_id);
     $(".todos").append(past_waiting_todos);
 });

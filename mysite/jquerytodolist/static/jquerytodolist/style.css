@@ -12,6 +12,35 @@
 	margin-top:2px;    
 }
 
+#deleteTask{
+    display: inline-block;
+    height:20px;
+	width:20px;
+	background-color:#cc0000;
+	font-family:arial;
+    font-size: 80%;
+	color:#ffffff;
+	border-radius: 5px;
+	text-align:center;
+    vertical-align:top;
+	margin-top:2px;    
+}
+
+#editTask{
+    display: inline-block;
+    height:20px;
+	width:20px;
+	background-color:#4782e0;
+	font-family:arial;
+    font-size: 80%;
+	color:#ffffff;
+	border-radius: 5px;
+	text-align:center;
+    vertical-align:top;
+	margin-top:2px;        
+}
+
+
 form {
     display: inline-block;
 }

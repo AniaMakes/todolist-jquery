@@ -9,9 +9,11 @@
     <script>
         var x;
         var past_waiting_todos = "";
-	    {% for task in waiting_todos %}
-            past_waiting_todos += '{{task.task_text}}' + "<br />";
-    	{% endfor %}
+            "<table>"
+    	    {% for task in waiting_todos %}
+                past_waiting_todos += "<tr>" + "<td>" + '{{task.task_text}}' + "</td>" + "<td>" + "<div id='deleteTask' name=delete_task_{{task.id}}>&#10004;</div>" + "</td>" + "<td>" + "<div id='editTask' name=edit_task_{{task.id}}>&#10000;</div>" + "</td>"+ "</tr>" ;
+        	{% endfor %}
+            "</table>"
     </script>
     
     <script type="text/javascript" src={% static "jquerytodolist/script.js" %}></script>    
