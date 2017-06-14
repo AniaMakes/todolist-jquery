@@ -1,0 +1,26 @@
+#addTask {
+    display: inline-block;
+    height:20px;
+	width:70px;
+	background-color:#cc0000;
+	font-family:arial;
+    font-size: 80%;
+	color:#ffffff;
+	border-radius: 5px;
+	text-align:center;
+    vertical-align:top;
+	margin-top:2px;    
+}
+
+form {
+    display: inline-block;
+}
+
+.tosdos {
+	font-family:garamond;
+	color:#cc0000;
+}
+
+h1 {
+    font-family: tahoma;
+}

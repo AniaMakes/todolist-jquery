@@ -1,0 +1,34 @@
+{% load static %}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        var first_todo_id = '{{waiting_todos.0.id}}';
+    </script>
+    
+    <script>
+        var x;
+        var past_waiting_todos = "";
+	    {% for task in waiting_todos %}
+            past_waiting_todos += '{{task.task_text}}' + "<br />";
+    	{% endfor %}
+    </script>
+    
+    <script type="text/javascript" src={% static "jquerytodolist/script.js" %}></script>    
+    <link rel="stylesheet" type="text/css" href="{% static 'jquerytodolist/style.css' %}" />
+</head> 
+
+<body>
+
+<h1 id='h1'>Tracking your goals since 2017</h1>
+
+<h3>Add your task</h3>
+    <form name="todosinput">
+        <input id="addTaskBox" type="text" name="taskText"/>
+    </form>
+    <div id="addTask">Add a task</div>
+    <br />
+    <hr />
+    <div class="todos">
+        
+</body>
