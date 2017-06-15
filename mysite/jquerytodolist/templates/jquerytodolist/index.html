@@ -7,14 +7,41 @@
     </script>
     
     <script>
-        var x;
         var past_waiting_todos = "";
             "<table>"
     	    {% for task in waiting_todos %}
-                past_waiting_todos += "<tr>" + "<td>" + '{{task.task_text}}' + "</td>" + "<td>" + "<div id='deleteTask' name=delete_task_{{task.id}}>&#10004;</div>" + "</td>" + "<td>" + "<div id='editTask' name=edit_task_{{task.id}}>&#10000;</div>" + "</td>"+ "</tr>" ;
+                past_waiting_todos += "<tr id=task{{task.id}} >" + "<td>" +
+                 '{{task.task_text}}' 
+                + "</td>" + "<td>" + 
+                "<div class= completeTask id='completeTask{{task.id}}' name=complete_task_{{task.id}}>&#10004;</div>" + 
+                "</td>" + "<td>" + 
+                "<div class=editTask id='editTask{{task.id}}' name=edit_task_{{task.id}}>&#10000;</div>" 
+                + "</td>"+ "</tr>" ;
         	{% endfor %}
             "</table>"
     </script>
+    
+    <script>
+        var past_tasks_done = "";
+            "<table>"
+    	    {% for task in tasks_done %}
+                past_tasks_done += 
+                "<tr id=task{{task.id}} >" + 
+                "<td>" +
+                "<div class=deleteSubmission id='deleteSubmission{{task.id}}' name=delete_submission_{{task.id}}>purge</div>" +                    
+                "</td>" + 
+                "<td>" + 
+                "<div class= undoCompleteTask id='undo_complete_{{task.id}}' name=undo_complete_{{task.id}}>undo</div>" + 
+                "</td>" + 
+                "<td>" + 
+                '{{task.task_text}}' +
+                "</td>" +
+                "</tr>" ;
+        	{% endfor %}
+            "</table>"
+
+    </script>
+    
     
     <script type="text/javascript" src={% static "jquerytodolist/script.js" %}></script>    
     <link rel="stylesheet" type="text/css" href="{% static 'jquerytodolist/style.css' %}" />
@@ -31,6 +58,11 @@
     <div id="addTask">Add a task</div>
     <br />
     <hr />
-    <div class="todos">
+    <h3>Pending tasks:</h3>
+    <div class="todos"></div>
+    <br />
+    <hr />
+    <h3>Completed tasks:</h3>
+    <div class="completedtodos"></div>
         
 </body>

@@ -12,7 +12,7 @@
 	margin-top:2px;    
 }
 
-#deleteTask{
+.completeTask{
     display: inline-block;
     height:20px;
 	width:20px;
@@ -26,7 +26,40 @@
 	margin-top:2px;    
 }
 
-#editTask{
+.deleteSubmission{
+    display: inline-block;
+    height:20px;
+	/*width:20px;*/
+	background-color:#f442e8;
+	font-family:arial;
+    font-size: 80%;
+	color:#ffffff;
+	border-radius: 5px;
+	text-align:center;
+    vertical-align:top;
+	margin-top:2px;     
+    padding-left: 5px;
+    padding-right: 5px;   
+}
+
+.undoCompleteTask{
+    display: inline-block;
+    height:20px;
+	/*width:20px;*/
+	background-color:#acf441;
+	font-family:arial;
+    font-size: 80%;
+	color:#000000;
+	border-radius: 5px;
+	text-align:center;
+    vertical-align:top;
+	margin-top:2px;     
+    padding-left: 5px;
+    padding-right: 5px;  
+}
+
+
+.editTask{
     display: inline-block;
     height:20px;
 	width:20px;
@@ -40,6 +73,17 @@
 	margin-top:2px;        
 }
 
+tr:nth-child(even) {background-color: #dddddd;}
+
+td {
+    padding: 3px;
+}
+
+table {
+    border: 5px solid black; 
+    border-radius: 15px 50px;
+    padding: 15px
+}
 
 form {
     display: inline-block;

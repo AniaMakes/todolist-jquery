@@ -24,20 +24,33 @@ def index(request):
         save_prefix = "save_task_"
         cancel_prefix = "cancel_task_"
         
-        if (item_name.startswith(complete_prefix)):
-            task_id_str = item_name[len(complete_prefix):]
+        # printing line to help with diagnostics
+        if request.POST != {}:
+            print(request.POST)
+            print(type(request.POST))
+
+        # function to submit a new task from text-box
+        if (item_name.startswith("submit_task")):
+            content = (request.POST["submit_task"])
+            if content != "":
+                if not Task.objects.filter(task_text=content).exists():
+                    save_submission(content)        
+
+        # function to mark a task as completed (change Task.completed to True)
+        if (item_value.startswith(complete_prefix)):
+            task_id_str = item_value[len(complete_prefix):]
             id_to_complete = int(task_id_str)
             print (id_to_complete)
             Task.objects.filter(id=id_to_complete).update(completed = True)
 
-        if (item_name.startswith(delete_prefix)):
-            task_id_str = item_name[len(delete_prefix):]
+        if (item_value.startswith(delete_prefix)):
+            task_id_str = item_value[len(delete_prefix):]
             id_to_delete = int(task_id_str)
             print (id_to_delete)
             Task.objects.filter(id=id_to_delete).delete()
 
-        if (item_name.startswith(undo_prefix)):
-            task_id_str = item_name[len(undo_prefix):]
+        if (item_value.startswith(undo_prefix)):
+            task_id_str = item_value[len(undo_prefix):]
             id_to_undo = int(task_id_str)
             print (id_to_undo)
             Task.objects.filter(id=id_to_undo).update(completed = False)
@@ -50,11 +63,6 @@ def index(request):
             if content != "":
                 Task.objects.filter(id=id_to_save).update(task_text = content)                    
 
-        if (item_name.startswith("submit_task")):
-            content = (request.POST["task_text"])
-            if content != "":
-                if not Task.objects.filter(task_text=content).exists():
-                    save_submission(content)
 
         if (item_name.startswith("search_tasks")):
             content = (request.POST['text_field_search'])
@@ -74,21 +82,13 @@ def index(request):
             task_to_be_edited_text = task_to_edit_part1.task_text
     
 
-        
-        if request.POST != {}:
-            print(request.POST)
-            print(type(request.POST))
-            print (type(request.POST["task_text"]))
-        
-            content = (request.POST["task_text"])
-            if content != "":
-                if not Task.objects.filter(task_text=content).exists():
-                    save_submission(content)    
-    
+
+
+
     
     context = {
         'waiting_todos': waiting_todos.order_by("id"),
-        # 'tasks_done': tasks_done.order_by("id"),
+        'tasks_done': tasks_done.order_by("id"),
         # 'past_search_term': past_search_term,
         # 'task_to_be_edited_text': task_to_be_edited_text,
     }    
