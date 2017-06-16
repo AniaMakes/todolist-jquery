@@ -1,88 +1,101 @@
 {% load static %}
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- <script>
-        var first_todo_id = '{{waiting_todos.0.id}}';
-    </script> -->
-    
-    <script>
-        var lastIDinDatabaseReturn = lastIDinDatabaseReturn;
-    </script>
-    
-    <script>
-        var past_waiting_todos = "";
-            "<table>"
-    	    {% for task in waiting_todos %}
-                past_waiting_todos += "<tr id=task{{task.id}} >" + "<td>" +
-                 '{{task.task_text}}' 
-                + "</td>" + "<td>" + 
-                "<div class= completeTask id='completeTask{{task.id}}' name=complete_task_{{task.id}}>&#10004;</div>" + 
-                "</td>" + "<td>" + 
-                "<div class=editTask id='editTask{{task.id}}' name=edit_task_{{task.id}}>&#10000;</div>" 
-                + "</td>"+ "</tr>" ;
-        	{% endfor %}
-            "</table>"
-    </script>
-    
-    <script>
-        var past_tasks_done = "";
-            "<table>"
-    	    {% for task in tasks_done %}
-                past_tasks_done += 
-                "<tr id=task{{task.id}} >" + 
-                "<td>" +
-                "<div class=deleteSubmission id='deleteSubmission{{task.id}}' name=delete_submission_{{task.id}}>purge</div>" +                    
-                "</td>" + 
-                "<td>" + 
-                "<div class= undoCompleteTask id='undo_complete_{{task.id}}' name=undo_complete_{{task.id}}>undo</div>" + 
-                "</td>" + 
-                "<td>" + 
-                '{{task.task_text}}' +
-                "</td>" +
-                "</tr>" ;
-        	{% endfor %}
-            "</table>"
+	<!-- imports jquery library-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 
-    </script>
-    
-    
-    <script type="text/javascript" src={% static "jquerytodolist/script.js" %}></script>    
-    <link rel="stylesheet" type="text/css" href="{% static 'jquerytodolist/style.css' %}" />
-</head> 
+
+	</script>
+	<!-- point the file to use script.js as a source for code -->
+	<script type="text/javascript" src={% static "jquerytodolist/script.js" %}>
+
+
+	</script>
+	<!-- links the stylesheet to index.html -->
+	<link rel="stylesheet" type="text/css" href="{% static 'jquerytodolist/style.css' %}" />
+</head>
 
 <body>
+	<h1 id='h1'>Tracking your goals since 2017</h1>
 
-<h1 id='h1'>Tracking your goals since 2017</h1>
+	<h3>Add your task</h3>
+	<!-- creates a text input box to collect new tasks -->
+	<form name="todosinput">
+		<input id="addTaskBox" type="text" name="taskText" />
+	</form>
+	
+	<!-- creates a button to submit tasks -->
+	<div id="addTask">Add a task</div>
 
-<h3>Add your task</h3>
-    <form name="todosinput">
-        <input id="addTaskBox" type="text" name="taskText"/>
-    </form>
-    <div id="addTask">Add a task</div>
-    <br />
-    <hr />
-    <h3>Pending tasks:</h3>
-    <div class="todos"></div>
-    <br />
-    <hr />
-    <h3>Completed tasks:</h3>
-    <div class="completedtodos">
-    <table>
-        {% for task in tasks_done %}
-            <tr id=task{{task.id}}>
-            	<td>
-            		<div class="deleteSubmission" id='deleteSubmission{{task.id}}' name="delete_submission_{{task.id}}">purge</div>
-            	</td>
-            	<td>
-            		<div class= "undoCompleteTask" id='undo_complete_{{task.id}}' name="undo_complete_{{task.id}}">undo</div>
-            	</td>
-            	<td>
-            		{{task.task_text}}
-            	</td>
-            </tr>
-        {% endfor %}
-</table>
-    </div>
-        
+	<br />
+	<hr />
+	<h3>Pending tasks:</h3>
+
+	<!-- creates a table of tasks which are not completed -->
+
+	<table class="todos">
+		{% for task in waiting_todos %}
+		<tr id=task{{task.id}}>
+			<td> {{task.task_text}} </td>
+			<td>
+				<div class=completeTask  name=complete_task_{{task.id}}>&#10004;</div>
+			</td>
+			<td>
+				<div class=editTask
+				 name=edit_task_{{task.id}}>&#10000;</div>
+			</td>
+		</tr> {% endfor %}
+	</table>
+
+	<!-- creates a template table of tasks which are not completed -->
+	<table class="hidden">
+		<tr class="templatePendingTask">
+			<td> {{task.task_text}} </td>
+			<td>
+				<div class=completeTask  name=complete_task_{{task.id}}>&#10004;</div>
+			</td>
+			<td>
+				<div class=editTask  
+				name=edit_task_{{task.id}}>&#10000;</div>
+			</td>
+		</tr> 
+	</table>
+
+	<br />
+	<hr />
+	<h3>Completed tasks:</h3>
+
+	<!-- creates a table of tasks which are completed -->
+	<table class="completedtodos">
+		{% for task in tasks_done %}
+		<tr data-id="{{task.id}}">
+			<td>
+				<div class="deleteSubmission" name="delete_submission_{{task.id}}">purge</div>
+			</td>
+			<td>
+				<div class="undoCompleteTask"  name="undo_complete_{{task.id}}">undo</div>
+			</td>
+			<td>
+				{{task.task_text}}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+<!-- template for the table of tasks which are completed -->
+	<table class="hidden">
+		<tr class="templateCompletedTask" data-id="TBA">
+			<td>
+				<div class="deleteSubmission" name="delete_submission_{{task.id}}">purge</div>
+			</td>
+			<td>
+				<div class="undoCompleteTask" name="undo_complete_{{task.id}}">undo</div>
+			</td>
+			<td>
+				{{task.task_text}}
+			</td>
+		</tr>
+	</table>
+
+
 </body>
