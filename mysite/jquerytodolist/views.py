@@ -14,6 +14,7 @@ def index(request):
     tasks_done = todo_list.filter(completed=True)
     past_search_term = ""
     task_to_be_edited_text = ""
+    lastIDinDatabase = ""
     
     for item_name in request.POST:
         item_value = request.POST[item_name]
@@ -81,9 +82,14 @@ def index(request):
             task_to_edit_part1 = Task.objects.filter(id=id_to_undo)[0]
             task_to_be_edited_text = task_to_edit_part1.task_text
     
-
-
-
+        if (item_name.startswith("lastIDinDatabase")):
+            task_id_nr = waiting_todos.order_by("id").last()
+            # print (waiting_todos.order_by("id"))
+            print (task_id_nr.id)
+            lastIDinDatabase = task_id_nr.id
+            print (type(lastIDinDatabase))
+            response = HttpResponse(str(lastIDinDatabase))
+            return response
 
     
     context = {
@@ -92,5 +98,7 @@ def index(request):
         # 'past_search_term': past_search_term,
         # 'task_to_be_edited_text': task_to_be_edited_text,
     }    
+        
+    # print (context)
         
     return render(request, 'jquerytodolist/index.html', context)

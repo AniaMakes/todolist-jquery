@@ -38,7 +38,8 @@ $.ajaxSetup({
   }
 });
 
-// clicking Add a Task adds a task
+// clicking Add a Task adds a task - at the moment assumed not maintained - will
+// be once Enter works fully
 $(document).ready(function() {
   $('#addTask').click(function() {
     var toAdd = $('input[name=taskText]').val();
@@ -54,23 +55,50 @@ $(document).ready(function() {
     console.log(event);
     if (event.keyCode == 13) {
       var toAdd = $('input[name=taskText]').val();
-      $(".todos").append('<div class="item">' + toAdd + '</div>');
       event.preventDefault();
-      $.post("/jquerytodolist/", {submit_task : $('input[name=taskText]').val()})
-      $('#addTaskBox').val("");
+
+      // sends POST request to submit task
+
+      $.post("/jquerytodolist/", {
+         submit_task : $("input[name=taskText]").val()
+       }).done(function() {
+        $.ajax({
+           url : "",
+           method : "POST",
+           data : "lastIDinDatabase",
+           success : function(lastIDinDatabaseReturn) {
+             alert(lastIDinDatabaseReturn);
+             $(".todos").append(
+                 "<tr id><td>" + toAdd +
+                 "</td><td><div class= completeTask id='completeTask" + lastIDinDatabaseReturn +  " ' name=complete_task_" + lastIDinDatabaseReturn + "> &#10004;</div>" +
+                 "</td>" +
+                 "<td>" +
+                 "<div class=editTask id='editTask" + lastIDinDatabaseReturn + " ' name=edit_task_" + lastIDinDatabaseReturn + ">&#10000;</div>" +
+                 "</td>" +
+                 "</tr>");
+             $("#addTaskBox").val("");
+           }
+        });
+      });
+      
     }
   });
 });
 
+//
+//   $ajax({
+//      url: "index.html", data: "lastIDinDatabase", method: POST, success
+//      : function(answer){
+//          //replace {{task.id}} with answer
+//      }
+//   });
+
 // prints out a list of waiting todos
-$(document).ready(function() {
-  $(".todos").append(past_waiting_todos);
-});
+$(document).ready(function() { $(".todos").append(past_waiting_todos); });
 
 // prints out a list of done todos
-$(document).ready(function() {
-  $(".completedtodos").append(past_tasks_done);
-});
+//$(document).ready(function() {
+//$(".completedtodos").append(past_tasks_done); });
 
 // clicking Done changes status completed to True
 $(document).ready(function() {
@@ -82,11 +110,20 @@ $(document).ready(function() {
         prefix_len,
     );
     var idToComplete = completeTask.concat(toComplete);
-    console.log(completeID, prefix_len, toComplete, idToComplete);
+    console.log(this, completeID, prefix_len, toComplete, idToComplete);
+    $.post("/jquerytodolist/", {"completeIDnr" : completeID});
+    $(".completedtodos")
+        .append(
+            "<tr id=task{{task.id}} >" +
+            "<td>" +
+            "<div class=deleteSubmission id='deleteSubmission{{task.id}}' name=delete_submission_{{task.id}}>purge</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class= undoCompleteTask id='undo_complete_{{task.id}}' name=undo_complete_{{task.id}}>undo</div>" +
+            "</td>" +
+            '<td>' + (idToComplete) + '</td>');
     $(".todos #" + idToComplete).remove();
-    $(".completedtodos #" + idToComplete).append();
-    $.post("/jquerytodolist/", {"completeIDnr": completeID
-    }) ;   
+
   });
 });
 
@@ -103,11 +140,9 @@ $(document).ready(function() {
     console.log(undoCompleteID, prefix_len, toComplete, idToComplete);
     $(".todos #" + idToComplete).append();
     $(".completedtodos #" + idToComplete).remove();
-    $.post("/jquerytodolist/", {"undocompleteIDnr": undoCompleteID
-    }) ;   
+    $.post("/jquerytodolist/", {"undocompleteIDnr" : undoCompleteID});
   });
 });
-
 
 // clicking Purge completely deletes the item from the database
 $(document).ready(function() {
@@ -121,8 +156,6 @@ $(document).ready(function() {
     var idToComplete = completeTask.concat(toComplete);
     console.log(deleteSubmissionID, prefix_len, toComplete, idToComplete);
     $(".completedtodos #" + idToComplete).remove();
-    $.post("/jquerytodolist/", {"undocompleteIDnr": deleteSubmissionID
-    }) ;   
+    $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
   });
 });
-

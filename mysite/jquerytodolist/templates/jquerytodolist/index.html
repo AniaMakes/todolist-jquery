@@ -2,8 +2,12 @@
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
+    <!-- <script>
         var first_todo_id = '{{waiting_todos.0.id}}';
+    </script> -->
+    
+    <script>
+        var lastIDinDatabaseReturn = lastIDinDatabaseReturn;
     </script>
     
     <script>
@@ -63,6 +67,22 @@
     <br />
     <hr />
     <h3>Completed tasks:</h3>
-    <div class="completedtodos"></div>
+    <div class="completedtodos">
+    <table>
+        {% for task in tasks_done %}
+            <tr id=task{{task.id}}>
+            	<td>
+            		<div class="deleteSubmission" id='deleteSubmission{{task.id}}' name="delete_submission_{{task.id}}">purge</div>
+            	</td>
+            	<td>
+            		<div class= "undoCompleteTask" id='undo_complete_{{task.id}}' name="undo_complete_{{task.id}}">undo</div>
+            	</td>
+            	<td>
+            		{{task.task_text}}
+            	</td>
+            </tr>
+        {% endfor %}
+</table>
+    </div>
         
 </body>

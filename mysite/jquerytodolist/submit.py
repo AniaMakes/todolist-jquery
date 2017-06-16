@@ -5,6 +5,7 @@ def save_submission(tt):
     t = Task(task_text=tt, creation_date=timezone.now())
     print (t)
     t.save()
+    # t.id ()
 
 def edit_submission(id, et):
     t = Task(id = id, task_text=et)
