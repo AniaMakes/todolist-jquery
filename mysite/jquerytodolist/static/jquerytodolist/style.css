@@ -46,6 +46,10 @@
 	display: none;
 }
 
+#makeCompletedVisible{
+	display: none;
+}
+
 .undoCompleteTask {
 	display: inline-block;
 	height: 20px;
@@ -97,6 +101,10 @@ form {
 .tosdos {
 	font-family: garamond;
 	color: #cc0000;
+}
+
+.noSuchTasks {
+	color: #50a31a;
 }
 
 h1 {

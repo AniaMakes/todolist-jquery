@@ -32,9 +32,10 @@
 	<h3>Pending tasks:</h3>
 
 	<!-- creates a table of tasks which are not completed -->
-
+{% if waiting_todos %}
+	
 	<table class="todos">
-		{% for task in waiting_todos %}
+	{% for task in waiting_todos %}
 		<tr id=task{{task.id}}>
 			<td> {{task.task_text}} </td>
 			<td>
@@ -44,8 +45,14 @@
 				<div class=editTask
 				 name=edit_task_{{task.id}}>&#10000;</div>
 			</td>
-		</tr> {% endfor %}
+		</tr>
+			{% endfor %} 
 	</table>
+
+			{% else %}
+				
+				<h3 class="noSuchTasks">No such tasks exist</h3>
+			{% endif %}
 
 	<!-- creates a template table of tasks which are not completed -->
 	<table class="hidden">
@@ -61,26 +68,33 @@
 		</tr> 
 	</table>
 
+
 	<br />
 	<hr />
 	<h3>Completed tasks:</h3>
 
 	<!-- creates a table of tasks which are completed -->
-	<table class="completedtodos">
-		{% for task in tasks_done %}
-		<tr data-id="{{task.id}}">
-			<td>
-				<div class="deleteSubmission" name="delete_submission_{{task.id}}">purge</div>
-			</td>
-			<td>
-				<div class="undoCompleteTask"  name="undo_complete_{{task.id}}">undo</div>
-			</td>
-			<td>
-				{{task.task_text}}
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
+	{% if tasks_done %}
+		<table class="completedtodos">
+				{% for task in tasks_done %}
+			<tr data-id="{{task.id}}">
+				<td>
+					<div class="deleteSubmission" name="delete_submission_{{task.id}}">purge</div>
+				</td>
+				<td>
+					<div class="undoCompleteTask"  name="undo_complete_{{task.id}}">undo</div>
+				</td>
+				<td>
+					{{task.task_text}}
+				</td>
+			</tr>
+					{% endfor %}
+		</table>
+
+	{% else %}
+		<table class="completedtodos" id="makeCompletedVisible"></table> 
+		<h3 class="noSuchTasks" id="headingMakeCompletedVisible">No such tasks exist</h3>
+	{% endif %}
 
 <!-- template for the table of tasks which are completed -->
 	<table class="hidden">
