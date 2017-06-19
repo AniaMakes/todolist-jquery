@@ -41,8 +41,15 @@ def index(request):
         if (item_value.startswith(complete_prefix)):
             task_id_str = item_value[len(complete_prefix):]
             id_to_complete = int(task_id_str)
-            print (id_to_complete)
             Task.objects.filter(id=id_to_complete).update(completed = True)
+    
+                
+        if (item_name.startswith("taskNameFetching")):
+            task_id_str = item_value[len(complete_prefix):]
+            id_to_complete = int(task_id_str)            
+            task_text = Task.objects.filter(id=id_to_complete)[0]
+            response = HttpResponse(task_text)
+            return response
 
         if (item_value.startswith(delete_prefix)):
             task_id_str = item_value[len(delete_prefix):]

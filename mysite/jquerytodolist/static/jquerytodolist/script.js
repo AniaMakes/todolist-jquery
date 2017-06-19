@@ -20,22 +20,31 @@ var markAsDoneAction = function() {
   
   console.log(this, completeID, prefix_len, toComplete, idToComplete);
   
-  $.post("/jquerytodolist/", {"completeIDnr" : completeID});
-  
-  $(".completedtodos")
-      .append(
-          "<tr id=task{{task.id}} >" +
-          "<td>" +
-          "<div class=deleteSubmission id='deleteSubmission{{task.id}}' name=delete_submission_{{task.id}}>purge</div>" +
-          "</td>" +
-          "<td>" +
-          "<div class= undoCompleteTask id='undo_complete_{{task.id}}' name=undo_complete_{{task.id}}>undo</div>" +
-          "</td>" +
-          '<td>' + (idToComplete) + '</td>');
- 
+  $.post("/jquerytodolist/", {"completeIDnr" : completeID}).done(function() {
+   $.ajax({
+     url : "",
+     method : "POST",
+     data : {"taskNameFetching" : completeID},
+     success : function(taskNameFetched){
+        $(".completedtodos")
+          .append(
+              "<tr id=task" + idToComplete + " >" +
+              "<td>" +
+              "<div class=deleteSubmission id='deleteSubmission" + idToComplete +
+              " ' name=delete_submission_" + idToComplete + ">purge</div>" +
+              "</td>" +
+              "<td>" +
+              "<div class= undoCompleteTask id='undo_complete_" + idToComplete + "' name=undo_complete_" + idToComplete + ">undo</div>" +
+              "</td>" +
+              '<td>' + taskNameFetched + '</td>');
+
  // needs fixing to actually find the row to remove
+    console.log ($ (".todos").find(idToComplete))
   $ (".todos").find(idToComplete).remove();
-};
+}
+});
+});
+}
 
 function getCookie(name) {
   var cookieValue = null;
