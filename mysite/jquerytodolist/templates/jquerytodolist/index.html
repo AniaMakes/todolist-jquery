@@ -90,9 +90,9 @@
 			</tr>
 					{% endfor %}
 		</table>
-
+		<h3 class="noSuchTasks" id="headingMakeCompletedVisible" style="display:none">No such tasks exist</h3>
 	{% else %}
-		<table class="completedtodos" id="makeCompletedVisible"></table> 
+		<table class="completedtodos" style="display:none"></table> 
 		<h3 class="noSuchTasks" id="headingMakeCompletedVisible">No such tasks exist</h3>
 	{% endif %}
 

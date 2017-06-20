@@ -46,9 +46,9 @@
 	display: none;
 }
 
-#makeCompletedVisible{
+/*#makeCompletedVisible{
 	display: none;
-}
+}*/
 
 .undoCompleteTask {
 	display: inline-block;

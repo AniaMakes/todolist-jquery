@@ -4,6 +4,7 @@ WORKS:
 
 NEEDS FIXING:
 - currently empty pending list will not have "No such tasks exist" when empty.
+- completed tasks doesn't behave as wanted when undoing the final task
 
 
 

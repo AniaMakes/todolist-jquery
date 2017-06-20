@@ -38,7 +38,6 @@ $.ajaxSetup({
   }
 });
 
-
 // clicking Add a Task adds a task - at the moment assumed not maintained - will
 // be once Enter works fully
 $(document).ready(function() {
@@ -104,16 +103,13 @@ $(document).ready(function() {
   });
 });
 
-
 // MARKING TASKS AS COMPLETED ---------------------------------------
 
-var markAsDoneAction =
-    function() {
+var markAsDoneAction = function() {
   var completeID = $(this).attr("name");
   var completeTask = "task";
   var prefix_len = complete_prefix.length;
-  var toComplete = completeID.substring(
-      prefix_len);
+  var toComplete = completeID.substring(prefix_len);
   var idToComplete = completeTask.concat(toComplete);
 
   console.log(this, completeID, prefix_len, toComplete, idToComplete);
@@ -127,22 +123,21 @@ var markAsDoneAction =
       method : "POST",
       data : {"taskNameFetching" : completeID},
       success : function(taskNameFetched) {
-          document.getElementById("makeCompletedVisible").style.display = "block";
-          document.getElementById("headingMakeCompletedVisible").style.display = "none";
-        
-        
+        $(".completedtodos")[0].style.display = "block";
+        document.getElementById("headingMakeCompletedVisible").style.display = "none";
+
         // id to complete gives task###
-        var $item = $(
-            "<tr data-id=" + toComplete + " >" +
-            "<td>" +
-            "<div class=deleteSubmission id='deleteSubmission" + toComplete +
-            " ' name=delete_submission_" + toComplete + ">purge</div>" +
-            "</td>" +
-            "<td>" +
-            "<div class= undoCompleteTask id='undo_complete_" + toComplete +
-            "' name=undo_complete_" + toComplete + ">undo</div>" +
-            "</td>" +
-            '<td>' + taskNameFetched + '</td>');
+        var $item =
+            $("<tr data-id=" + toComplete + " >" +
+              "<td>" +
+              "<div class=deleteSubmission id='deleteSubmission" + toComplete +
+              " ' name=delete_submission_" + toComplete + ">purge</div>" +
+              "</td>" +
+              "<td>" +
+              "<div class= undoCompleteTask id='undo_complete_" + toComplete +
+              "' name=undo_complete_" + toComplete + ">undo</div>" +
+              "</td>" +
+              '<td>' + taskNameFetched + '</td>');
 
         $(".completedtodos").append($item);
 
@@ -154,14 +149,14 @@ var markAsDoneAction =
         // to make those buttons functional immediately
         $item.find('.undoCompleteTask').click(undoDone);
         $item.find('.deleteSubmission').click(markedAsPurged);
+
       }
     });
   });
 };
 
-    // clicking Done changes status completed to True
-    $(document)
-        .ready(function() { $(".completeTask").click(markAsDoneAction); });
+// clicking Done changes status completed to True
+$(document).ready(function() { $(".completeTask").click(markAsDoneAction); });
 
 // UNDOING -----------------------------------------------------------
 
@@ -169,8 +164,7 @@ var undoDone = function() {
   var undoCompleteID = $(this).attr("name");
   var completeTask = "task";
   var prefix_len = complete_prefix.length;
-  var toComplete = undoCompleteID.substring(
-      prefix_len);
+  var toComplete = undoCompleteID.substring(prefix_len);
   var idToComplete = completeTask.concat(toComplete);
   console.log(undoCompleteID, prefix_len, toComplete, idToComplete);
   $(".todos #" + idToComplete).append();
@@ -179,7 +173,9 @@ var undoDone = function() {
   $.post("/jquerytodolist/", {"undocompleteIDnr" : undoCompleteID});
 
   // make ajax request to fetch the conent of the name part
-  $.post("/jquerytodolist/", {"completeIDnr" : undoCompleteID}).done(function() {
+  $.post("/jquerytodolist/", {
+     "completeIDnr" : undoCompleteID
+   }).done(function() {
     $.ajax({
       url : "",
       method : "POST",
@@ -208,13 +204,16 @@ var undoDone = function() {
 
         // delete row from completed
         $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
-        
 
-        
+        // if (".completedtodos" == {})
+        //   ;
+        // document.getElementById("makeCompletedVisible").style.display = "none";
+        // document.getElementById("headingMakeCompletedVisible").style.display =
+        //     "block";
 
       }
+    });
   });
-});
 };
 
 // clicking Undo changes the status completed to False
@@ -222,16 +221,14 @@ $(document).ready(function() { $(".undoCompleteTask").click(undoDone); });
 
 // PURGING ------------------------------------------------------------
 
-var markedAsPurged =
-    function() {
+var markedAsPurged = function() {
   var deleteSubmissionID = $(this).attr("name");
 
   //$(this).parents('.task').attr('id')
 
   var completeTask = "task";
   var prefix_len = delete_prefix.length;
-  var toComplete = deleteSubmissionID.substring(
-      prefix_len);
+  var toComplete = deleteSubmissionID.substring(prefix_len);
   var idToComplete = completeTask.concat(toComplete);
   console.log(deleteSubmissionID, prefix_len, toComplete, idToComplete);
   console.log($(".completedtodos").find('[data-id="' + toComplete + '"]'));
@@ -239,11 +236,11 @@ var markedAsPurged =
   // $(".completedtodos #" + idToComplete).remove();
   $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
 
-  if (".completedtodos" == {});
-    document.getElementById("makeCompletedVisible").style.display = "none";
-    document.getElementById("headingMakeCompletedVisible").style.display = "block";
+  // if ("table.completedtodos" == {}){
+  // document.getElementById("makeCompletedVisible").style.display = "none";
+  // document.getElementById("headingMakeCompletedVisible").style.display =
+  //     "block";}
 };
 
 // clicking Purge completely deletes the item from the database
-$(document)
-    .ready(function() { $(".deleteSubmission").click(markedAsPurged); });
+$(document).ready(function() { $(".deleteSubmission").click(markedAsPurged); });
