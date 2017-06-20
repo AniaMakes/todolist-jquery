@@ -1,0 +1,8 @@
+WORKS:
+
+- add, then complete w/o refresh
+
+NEEDS FIXING:
+- purging a task doesn't delete it from the Completed tasks section
+
+
