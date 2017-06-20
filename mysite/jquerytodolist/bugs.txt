@@ -1,8 +1,10 @@
 WORKS:
 
-- add, then complete w/o refresh
+- sequence works w/o refresh: add, complete, undo, complete, purge
 
 NEEDS FIXING:
-- purging a task doesn't delete it from the Completed tasks section
+- currently empty pending list will not have "No such tasks exist" when empty.
+
+
 
 

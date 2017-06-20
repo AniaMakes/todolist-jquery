@@ -113,13 +113,12 @@ var markAsDoneAction =
   var completeTask = "task";
   var prefix_len = complete_prefix.length;
   var toComplete = completeID.substring(
-      prefix_len,);
+      prefix_len);
   var idToComplete = completeTask.concat(toComplete);
 
   console.log(this, completeID, prefix_len, toComplete, idToComplete);
 
   $(".completedtodos #" + idToComplete).append();
-  // $(".completedtodos #" + idToComplete).remove();
   $(".completedtodos").find('#' + idToComplete).remove(); // works
 
   $.post("/jquerytodolist/", {"completeIDnr" : completeID}).done(function() {
@@ -128,10 +127,8 @@ var markAsDoneAction =
       method : "POST",
       data : {"taskNameFetching" : completeID},
       success : function(taskNameFetched) {
-        //   document.getElementById("makeCompletedVisible").style.display =
-        //   "block";
-        //   document.getElementById("headingMakeCompletedVisible").style.display
-        //   = "none";
+          document.getElementById("makeCompletedVisible").style.display = "block";
+          document.getElementById("headingMakeCompletedVisible").style.display = "none";
         
         
         // id to complete gives task###
@@ -173,8 +170,7 @@ var undoDone = function() {
   var completeTask = "task";
   var prefix_len = complete_prefix.length;
   var toComplete = undoCompleteID.substring(
-      prefix_len,
-  );
+      prefix_len);
   var idToComplete = completeTask.concat(toComplete);
   console.log(undoCompleteID, prefix_len, toComplete, idToComplete);
   $(".todos #" + idToComplete).append();
@@ -212,6 +208,9 @@ var undoDone = function() {
 
         // delete row from completed
         $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
+        
+
+        
 
       }
   });
@@ -232,8 +231,7 @@ var markedAsPurged =
   var completeTask = "task";
   var prefix_len = delete_prefix.length;
   var toComplete = deleteSubmissionID.substring(
-      prefix_len,
-  );
+      prefix_len);
   var idToComplete = completeTask.concat(toComplete);
   console.log(deleteSubmissionID, prefix_len, toComplete, idToComplete);
   console.log($(".completedtodos").find('[data-id="' + toComplete + '"]'));
@@ -241,6 +239,9 @@ var markedAsPurged =
   // $(".completedtodos #" + idToComplete).remove();
   $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
 
+  if (".completedtodos" == {});
+    document.getElementById("makeCompletedVisible").style.display = "none";
+    document.getElementById("headingMakeCompletedVisible").style.display = "block";
 };
 
 // clicking Purge completely deletes the item from the database
