@@ -124,7 +124,8 @@ var markAsDoneAction = function() {
       data : {"taskNameFetching" : completeID},
       success : function(taskNameFetched) {
         $(".completedtodos")[0].style.display = "block";
-        document.getElementById("headingMakeCompletedVisible").style.display = "none";
+        document.getElementById("headingMakeCompletedVisible").style.display =
+            "none";
 
         // id to complete gives task###
         var $item =
@@ -205,11 +206,13 @@ var undoDone = function() {
         // delete row from completed
         $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
 
-        // if (".completedtodos" == {})
-        //   ;
-        // document.getElementById("makeCompletedVisible").style.display = "none";
-        // document.getElementById("headingMakeCompletedVisible").style.display =
-        //     "block";
+        if ($(".completedtodos")[0].rows.length === 0)
+          ;
+        {
+          $(".completedtodos")[0].style.display = "none";
+          document.getElementById("headingMakeCompletedVisible").style.display =
+              "block";
+        }
 
       }
     });
@@ -236,10 +239,13 @@ var markedAsPurged = function() {
   // $(".completedtodos #" + idToComplete).remove();
   $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
 
-  // if ("table.completedtodos" == {}){
-  // document.getElementById("makeCompletedVisible").style.display = "none";
-  // document.getElementById("headingMakeCompletedVisible").style.display =
-  //     "block";}
+  if ($(".completedtodos")[0].rows.length === 0)
+    ;
+  {
+    $(".completedtodos")[0].style.display = "none";
+    document.getElementById("headingMakeCompletedVisible").style.display =
+        "block";
+  }
 };
 
 // clicking Purge completely deletes the item from the database
