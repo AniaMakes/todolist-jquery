@@ -38,6 +38,8 @@ $.ajaxSetup({
   }
 });
 
+// ADDING TASKS -------------------------------------------------------
+
 // clicking Add a Task adds a task - at the moment assumed not maintained - will
 // be once Enter works fully
 $(document).ready(function() {
@@ -103,6 +105,100 @@ $(document).ready(function() {
   });
 });
 
+// SEARCHING BOX ------------------------------------------------------
+
+// pressing ENTER in the search box
+$(document).ready(function() {
+  $('#searchTaskBox').keypress(function(event) {
+    console.log(event);
+    if (event.keyCode == 13) {
+      var toSearch = $('input[name=searchText]').val();
+      event.preventDefault();
+
+      // sends POST request to search task
+      console.log({
+        search_tasks : $("input[name=searchText]").val()
+        //  console.log(submit_task);
+      });
+
+      $.ajax({
+        url : "",
+        method : "POST",
+        data : {search_tasks : $("input[name=searchText]").val()},
+        success : function(searchResult) {
+            console.log(searchResult);
+            console.log(searchResult.length);
+    
+
+// in index.http have two invisible tables - one for pending, the other for completed. The code will go through the objects that have been returned and place them in both tables. They will also remain in the original tables. If a task is completed / purged / undone, the code will change the line among two search tables AND the pending / completed tables. 
+
+            if (searchResult.length !== 0){
+                for (i=0; i<searchResult.length; i++){
+                    console.log(searchResult[i]);
+                    if (!searchResult[i].completed){
+                        console.log("It's all true");
+                        $(".search_pending_todos")[0].style.display = "block";
+                        console.log (i); 
+                        
+                        var taskID = searchResult[i].id;
+                        console.log(taskID);
+                        var $item =
+                            $("<tr id='task" + taskID + "'><td>" + searchResult[i].task_text +
+                              "</td><td><div class= completeTask id='completeTask" +
+                              taskID + " ' name=complete_task_" +
+                              taskID + "> &#10004;</div>" +
+                              "</td>" +
+                              "<td>" +
+                              "<div class=editTask id='editTask" + taskID +
+                              " ' name=edit_task_" + taskID +
+                              ">&#10000;</div>" +
+                              "</td>" +
+                              "</tr>");
+                        $(".search_pending_todos").append($item);
+                        $("#addTaskBox").val("");
+
+                        $item.find('.completeTask').click(markAsDoneAction);
+                    
+                    }
+                    //this doesn't work because views is currently sending only current tasks! 
+                    
+                    else{
+                        console.log("boo");       
+                        $(".search_completed_todos")[0].style.display = "block";
+                        $(".search_pending_todos")[0].style.display = "block";
+                        console.log (i); 
+                        
+                        var taskID2 = searchResult[i].id;
+                        console.log(taskID2);
+                        var $item2 =
+                            $("<tr id='task" + taskID2 + "'><td>" + searchResult[i].task_text +
+                              "</td><td><div class= completeTask id='completeTask" +
+                              taskID2 + " ' name=complete_task_" +
+                              taskID2 + "> &#10004;</div>" +
+                              "</td>" +
+                              "<td>" +
+                              "<div class=editTask id='editTask" + taskID2 +
+                              " ' name=edit_task_" + taskID2 +
+                              ">&#10000;</div>" +
+                              "</td>" +
+                              "</tr>");
+                        $(".search_pending_todos").append($item2);
+                        $("#addTaskBox").val("");
+
+                        $item2.find('.completeTask').click(markAsDoneAction);
+                    }                     
+                }
+            }
+            else {
+                $(".noMatchingTasks")[0].style.display =
+                    "block";
+            }
+        }
+      });
+    }
+  });
+});
+
 // MARKING TASKS AS COMPLETED ---------------------------------------
 
 var markAsDoneAction = function() {
@@ -146,8 +242,8 @@ var markAsDoneAction = function() {
 
         $(".todos").find('#' + idToComplete).remove();
 
-        // I have added deleteSubmission and undoComplete, so we need functions
-        // to make those buttons functional immediately
+        // I have added deleteSubmission and undoComplete, so we need
+        // functions to make those buttons functional immediately
         $item.find('.undoCompleteTask').click(undoDone);
         $item.find('.deleteSubmission').click(markedAsPurged);
 
@@ -182,8 +278,8 @@ var undoDone = function() {
       method : "POST",
       data : {"taskNameFetching" : undoCompleteID},
       success : function(taskNameFetched) {
-        // this needs to build a row for the table and update buttons created
-        // and delete the current rown in the completed tasks table
+        // this needs to build a row for the table and update buttons
+        // created and delete the current rown in the completed tasks table
 
         // creates row in pending (duplicate of code in creating a brand new
         // task)
@@ -207,7 +303,6 @@ var undoDone = function() {
         $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
 
         if ($(".completedtodos")[0].rows.length === 0)
-          ;
         {
           $(".completedtodos")[0].style.display = "none";
           document.getElementById("headingMakeCompletedVisible").style.display =
@@ -240,7 +335,6 @@ var markedAsPurged = function() {
   $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
 
   if ($(".completedtodos")[0].rows.length === 0)
-    ;
   {
     $(".completedtodos")[0].style.display = "none";
     document.getElementById("headingMakeCompletedVisible").style.display =

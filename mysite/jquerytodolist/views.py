@@ -1,5 +1,10 @@
+import json
+import pickle
+from json import JSONDecoder, JSONEncoder, dumps, loads
+
 from django import forms
-from django.http import HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.urls import reverse
@@ -13,7 +18,7 @@ def index(request):
     todo_list = Task.objects.all()
     waiting_todos = todo_list.filter(completed=False)
     tasks_done = todo_list.filter(completed=True)
-    print (tasks_done)
+    print(tasks_done)
     past_search_term = ""
     task_to_be_edited_text = ""
     lastIDinDatabase = ""
@@ -63,7 +68,7 @@ def index(request):
         if (item_value.startswith(undo_prefix)):
             task_id_str = item_value[len(undo_prefix):]
             id_to_undo = int(task_id_str)
-            
+
             print(id_to_undo)
             Task.objects.filter(id=id_to_undo).update(completed=False)
 
@@ -76,15 +81,33 @@ def index(request):
                 Task.objects.filter(id=id_to_save).update(task_text=content)
 
         if (item_name.startswith("search_tasks")):
-            content = (request.POST['text_field_search'])
+            content = (request.POST['search_tasks'])
             past_search_term = content
             if content != "":
                 print(content)
                 print(Task.objects.filter(task_text__icontains=content))
+                print (1)
                 waiting_todos = todo_list.filter(
                     task_text__icontains=content, completed=False)
                 tasks_done = todo_list.filter(
                     task_text__icontains=content, completed=True)
+                print (2)   
+                
+                output_list=[]
+                for task in waiting_todos:
+                    dict_of_task = {"id": task.id, "task_text": task.task_text , "completed" : task.completed}
+                    output_list.append(dict_of_task)
+                
+                print (output_list)
+                
+                json_data = json.dumps(output_list)
+                
+                print (json_data)
+                # myJSON = JSON.stringify(output_list);
+                # 
+                # print (myJSON)
+                
+                return JsonResponse(output_list, safe=False)
 
         if (item_name.startswith(edit_prefix)):
             task_id_str = item_name[len(edit_prefix):]

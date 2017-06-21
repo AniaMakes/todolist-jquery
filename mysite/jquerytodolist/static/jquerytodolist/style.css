@@ -17,6 +17,20 @@ body {
 	margin-top: 2px;
 }
 
+#search {
+	display: inline-block;
+	height: 20px;
+	width: 70px;
+	background-color: #f4df42;
+	font-family: arial;
+	font-size: 80%;
+	color: #000000;
+	border-radius: 5px;
+	text-align: center;
+	vertical-align: top;
+	margin-top: 2px;
+}
+
 .completeTask {
 	display: inline-block;
 	height: 20px;
