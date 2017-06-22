@@ -1,10 +1,17 @@
 WORKS:
 
 - sequence works w/o refresh: add, complete, undo, complete, purge
-
+- refuses to accept < in text input boxes
 
 NEEDS FIXING:
 - currently empty pending list will not have "No such tasks exist" when empty.
+- editing doesn't work
+- Search button does nothing // known, deliberate
+- add task button adds tasks in a broken way / known, deliberate
+- undo button doesn't work for tasks in search
+- multiple copies of the same task are merged on reload
+
+
 
 
 

@@ -61,46 +61,56 @@ $(document).ready(function() {
 
       // sends POST request to submit task
 
-      $.post("/jquerytodolist/", {
-         submit_task : $("input[name=taskText]").val()
-       }).done(function() {
-        $.ajax({
-          url : "",
-          method : "POST",
-          data : "lastIDinDatabase",
-          success : function(lastIDinDatabaseReturn) {
+      if (toAdd !== "") {
 
-            // var $newTask = $('#task-template').clone();
-            //$newTask.id (?? not sure how to set the id) = 'task' +
-            // lastIDinDatabaseReturn;
-            // also set task text
+        if (toAdd.includes("<")) {
+          alert(
+              "Your item has not been added to the list. YOU, however, have been added to the Santa's naughty list");
 
-            //$(".todos").append($newTask);
+        } else {
 
-            var $item =
-                $("<tr id='task" + lastIDinDatabaseReturn + "'><td>" + toAdd +
-                  "</td><td><div class= completeTask id='completeTask" +
-                  lastIDinDatabaseReturn + " ' name=complete_task_" +
-                  lastIDinDatabaseReturn + "> &#10004;</div>" +
-                  "</td>" +
-                  "<td>" +
-                  "<div class=editTask id='editTask" + lastIDinDatabaseReturn +
-                  " ' name=edit_task_" + lastIDinDatabaseReturn +
-                  ">&#10000;</div>" +
-                  "</td>" +
-                  "</tr>");
-            $(".todos").append($item);
-            $("#addTaskBox").val("");
+          $.post("/jquerytodolist/", {
+             submit_task : $("input[name=taskText]").val()
+           }).done(function() {
+            $.ajax({
+              url : "",
+              method : "POST",
+              data : "lastIDinDatabase",
+              success : function(lastIDinDatabaseReturn) {
 
-            // this is the line that means that the button works straight away.
-            // Because a new button of class completeTask was added, it needs to
-            // be made active using the code below, which finds all
-            // .completeTask (including the new one), and assigns them "when
-            // clicked" action
-            $item.find('.completeTask').click(markAsDoneAction);
-          }
-        });
-      });
+                // var $newTask = $('#task-template').clone();
+                //$newTask.id (?? not sure how to set the id) = 'task' +
+                // lastIDinDatabaseReturn;
+                // also set task text
+
+                //$(".todos").append($newTask);
+
+                var $item = $(
+                    "<tr id='task" + lastIDinDatabaseReturn + "'><td>" + toAdd +
+                    "</td><td><div class= completeTask id='completeTask" +
+                    lastIDinDatabaseReturn + " ' name=complete_task_" +
+                    lastIDinDatabaseReturn + "> &#10004;</div>" +
+                    "</td>" +
+                    "<td>" +
+                    "<div class=editTask id='editTask" +
+                    lastIDinDatabaseReturn + " ' name=edit_task_" +
+                    lastIDinDatabaseReturn + ">&#10000;</div>" +
+                    "</td>" +
+                    "</tr>");
+                $(".todos").append($item);
+                $("#addTaskBox").val("");
+
+                // this is the line that means that the button works straight
+                // away. Because a new button of class completeTask was added,
+                // it needs to be made active using the code below, which finds
+                // all .completeTask (including the new one), and assigns them
+                // "when clicked" action
+                $item.find('.completeTask').click(markAsDoneAction);
+              }
+            });
+          });
+        }
+      }
     }
   });
 });
@@ -115,86 +125,101 @@ $(document).ready(function() {
       var toSearch = $('input[name=searchText]').val();
       event.preventDefault();
 
-      // sends POST request to search task
-      console.log({
-        search_tasks : $("input[name=searchText]").val()
-        //  console.log(submit_task);
-      });
+      if (toSearch !== "") {
 
-      $.ajax({
-        url : "",
-        method : "POST",
-        data : {search_tasks : $("input[name=searchText]").val()},
-        success : function(searchResult) {
-            console.log(searchResult);
-            console.log(searchResult.length);
-    
+        // sends POST request to search task
+        console.log({
+          search_tasks : $("input[name=searchText]").val()
+          //  console.log(submit_task);
+        });
 
-// in index.http have two invisible tables - one for pending, the other for completed. The code will go through the objects that have been returned and place them in both tables. They will also remain in the original tables. If a task is completed / purged / undone, the code will change the line among two search tables AND the pending / completed tables. 
+        if (toSearch.includes("<")) {
+          alert(
+              "Your item has not been searched for. YOU, however, have been added to the Santa's naughty list");}
 
-            if (searchResult.length !== 0){
-                for (i=0; i<searchResult.length; i++){
-                    console.log(searchResult[i]);
-                    if (!searchResult[i].completed){
-                        console.log("It's all true");
-                        $(".search_pending_todos")[0].style.display = "block";
-                        console.log (i); 
-                        
-                        var taskID = searchResult[i].id;
-                        console.log(taskID);
-                        var $item =
-                            $("<tr id='task" + taskID + "'><td>" + searchResult[i].task_text +
-                              "</td><td><div class= completeTask id='completeTask" +
-                              taskID + " ' name=complete_task_" +
-                              taskID + "> &#10004;</div>" +
-                              "</td>" +
-                              "<td>" +
-                              "<div class=editTask id='editTask" + taskID +
-                              " ' name=edit_task_" + taskID +
-                              ">&#10000;</div>" +
-                              "</td>" +
-                              "</tr>");
-                        $(".search_pending_todos").append($item);
-                        $("#addTaskBox").val("");
+        else {
 
-                        $item.find('.completeTask').click(markAsDoneAction);
-                    
-                    }
-                    //this doesn't work because views is currently sending only current tasks! 
-                    
-                    else{
-                        console.log("boo");       
-                        $(".search_completed_todos")[0].style.display = "block";
-                        $(".search_pending_todos")[0].style.display = "block";
-                        console.log (i); 
-                        
-                        var taskID2 = searchResult[i].id;
-                        console.log(taskID2);
-                        var $item2 =
-                            $("<tr id='task" + taskID2 + "'><td>" + searchResult[i].task_text +
-                              "</td><td><div class= completeTask id='completeTask" +
-                              taskID2 + " ' name=complete_task_" +
-                              taskID2 + "> &#10004;</div>" +
-                              "</td>" +
-                              "<td>" +
-                              "<div class=editTask id='editTask" + taskID2 +
-                              " ' name=edit_task_" + taskID2 +
-                              ">&#10000;</div>" +
-                              "</td>" +
-                              "</tr>");
-                        $(".search_pending_todos").append($item2);
-                        $("#addTaskBox").val("");
+          $.ajax({
+            url : "",
+            method : "POST",
+            data : {search_tasks : $("input[name=searchText]").val()},
+            success : function(searchResult) {
+              console.log(searchResult);
+              console.log(searchResult.length);
 
-                        $item2.find('.completeTask').click(markAsDoneAction);
-                    }                     
+              // in index.http have two invisible tables - one for pending, the
+              // other for completed. The code will go through the objects that
+              // have been returned and place them in both tables. They will
+              // also remain in the original tables. If a task is completed /
+              // purged / undone, the code will change the line among two search
+              // tables AND the pending / completed tables.
+
+              // if there is at least one matching result
+              if (searchResult.length !== 0) {
+                // for each result
+                for (i = 0; i < searchResult.length; i++) {
+                  console.log(searchResult[i]);
+                  // if its completed status is false
+                  if (!searchResult[i].completed) {
+                    console.log("It's all true");
+                    $(".search_pending_todos")[0].style.display = "block";
+                    console.log(i);
+
+                    var taskID = searchResult[i].id;
+                    console.log(taskID);
+                    var $item =
+                        $("<tr id='task" + taskID + "'><td>" +
+                          searchResult[i].task_text +
+                          "</td><td><div class= completeTask id='completeTask" +
+                          taskID + " ' name=complete_task_" + taskID +
+                          "> &#10004;</div>" +
+                          "</td>" +
+                          "<td>" +
+                          "<div class=editTask id='editTask" + taskID +
+                          " ' name=edit_task_" + taskID + ">&#10000;</div>" +
+                          "</td>" +
+                          "</tr>");
+                    $(".search_pending_todos").append($item);
+                    $("#addTaskBox").val("");
+
+                    $item.find('.completeTask').click(markAsDoneAction);
+
+                  }
+                  // if its completed status is true
+
+                  else {
+                    console.log("boo");
+                    $(".search_completed_todos")[0].style.display = "block";
+                    console.log(i);
+
+                    var taskID2 = searchResult[i].id;
+                    console.log(taskID2);
+                    var $item2 =
+                        $("<tr data-id=" + taskID2 + " >" +
+                          "<td>" +
+                          "<div class=deleteSubmission id='deleteSubmission" +
+                          taskID2 + " ' name=delete_submission_" + taskID2 +
+                          ">purge</div>" +
+                          "</td>" +
+                          "<td>" +
+                          "<div class= undoCompleteTask id='undo_complete_" +
+                          taskID2 + "' name=undo_complete_" + taskID2 +
+                          ">undo</div>" +
+                          "</td>" +
+                          '<td>' + searchResult[i].task_text + '</td></tr>');
+                    $(".search_completed_todos").append($item2);
+                    $("#addTaskBox").val("");
+
+                    $item2.find('.markedAsPurged').click(markAsDoneAction);
+                  }
                 }
+              } else {
+                $(".noMatchingTasks")[0].style.display = "block";
+              }
             }
-            else {
-                $(".noMatchingTasks")[0].style.display =
-                    "block";
-            }
+          });
         }
-      });
+      }
     }
   });
 });
@@ -223,7 +248,7 @@ var markAsDoneAction = function() {
         document.getElementById("headingMakeCompletedVisible").style.display =
             "none";
 
-        // id to complete gives task###
+        // tocomplete gives task ###
         var $item =
             $("<tr data-id=" + toComplete + " >" +
               "<td>" +
@@ -234,19 +259,33 @@ var markAsDoneAction = function() {
               "<div class= undoCompleteTask id='undo_complete_" + toComplete +
               "' name=undo_complete_" + toComplete + ">undo</div>" +
               "</td>" +
-              '<td>' + taskNameFetched + '</td>');
+              '<td>' + taskNameFetched + '</td></tr>');
 
+        // marking item as complete shoud:
+        // 1. move the item to  completedtodos
         $(".completedtodos").append($item);
+        // 2. move the item to search_completed_todos
+
+        $(".search_completed_todos").append($item.clone());
+
+        // $(".search_completed_todos")[0].style.display = "block";
 
         console.log($(".todos").find('#' + idToComplete));
 
         $(".todos").find('#' + idToComplete).remove();
+        $(".search_pending_todos").find('#' + idToComplete).remove();
 
-        // I have added deleteSubmission and undoComplete, so we need
-        // functions to make those buttons functional immediately
-        $item.find('.undoCompleteTask').click(undoDone);
-        $item.find('.deleteSubmission').click(markedAsPurged);
+        if ($(".search_pending_todos")[0].rows.length === 0) {
+          $(".search_pending_todos")[0].style.display = "none";
 
+          // I have added deleteSubmission and undoComplete, so we need
+          // functions to make those buttons functional immediately
+          $item.find('.undoCompleteTask').click(undoDone);
+          $item.find('.deleteSubmission').click(markedAsPurged);
+
+          $item.clone().find('.undoCompleteTask').click(undoDone);
+          $item.clone().find('.deleteSubmission').click(markedAsPurged);
+        }
       }
     });
   });
@@ -294,6 +333,8 @@ var undoDone = function() {
                       "</td>" +
                       "</tr>");
         $(".todos").append($item);
+        $(".search_pending_todo").append($item.clone());
+
         $("#addTaskBox").val("");
 
         // updates buttons
@@ -301,9 +342,11 @@ var undoDone = function() {
 
         // delete row from completed
         $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
+        $(".search_completed_todos")
+            .find('[data-id="' + toComplete + '"]')
+            .remove();
 
-        if ($(".completedtodos")[0].rows.length === 0)
-        {
+        if ($(".completedtodos")[0].rows.length === 0) {
           $(".completedtodos")[0].style.display = "none";
           document.getElementById("headingMakeCompletedVisible").style.display =
               "block";
@@ -330,12 +373,17 @@ var markedAsPurged = function() {
   var idToComplete = completeTask.concat(toComplete);
   console.log(deleteSubmissionID, prefix_len, toComplete, idToComplete);
   console.log($(".completedtodos").find('[data-id="' + toComplete + '"]'));
+
   $(".completedtodos").find('[data-id="' + toComplete + '"]').remove();
+  $(".search_completed_todos").find('[data-id="' + toComplete + '"]').remove();
   // $(".completedtodos #" + idToComplete).remove();
   $.post("/jquerytodolist/", {"undocompleteIDnr" : deleteSubmissionID});
 
-  if ($(".completedtodos")[0].rows.length === 0)
-  {
+  if ($(".search_completed_todos")[0].rows.length === 0) {
+    $(".search_completed_todos")[0].style.display = "none";
+  }
+
+  if ($(".completedtodos")[0].rows.length === 0) {
     $(".completedtodos")[0].style.display = "none";
     document.getElementById("headingMakeCompletedVisible").style.display =
         "block";

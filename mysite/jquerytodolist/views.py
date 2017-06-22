@@ -98,6 +98,10 @@ def index(request):
                     dict_of_task = {"id": task.id, "task_text": task.task_text , "completed" : task.completed}
                     output_list.append(dict_of_task)
                 
+                for task in tasks_done:
+                    dict_of_task = {"id": task.id, "task_text": task.task_text , "completed" : task.completed}
+                    output_list.append(dict_of_task)
+                
                 print (output_list)
                 
                 json_data = json.dumps(output_list)
