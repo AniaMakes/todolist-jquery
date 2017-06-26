@@ -3,17 +3,27 @@ WORKS:
 - sequence works w/o refresh: add, complete, undo, complete, purge
 - refuses to accept < in text input boxes
 
+DELIBERATE BUGS:
+- Search button does nothing 
+- add task button adds tasks in a broken way 
+
+
 NEEDS FIXING:
 - currently empty pending list will not have "No such tasks exist" when empty.
 - editing doesn't work
-- Search button does nothing // known, deliberate
-- add task button adds tasks in a broken way / known, deliberate
-- undo button doesn't work for tasks in search
+
 - multiple copies of the same task are merged on reload
 
+- undo button doesn't work for tasks in search
 
+- add pointer cursor to buttons
 
+- prettify Search output
 
+- adding task doesn't clear the search
 
+- display - empty string or table
 
+- one function that inserts a pending task + event listeners, another for inserting completed tasks and implements them (page load, clicking relevant buttons)
 
+- amend search to only use two tables instead of 4

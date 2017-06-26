@@ -42,7 +42,7 @@ body {
 	border-radius: 5px;
 	text-align: center;
 	vertical-align: top;
-	margin-top: 2px;
+	cursor: default;
 }
 
 .deleteSubmission {
@@ -59,6 +59,7 @@ body {
 	margin-top: 2px;
 	padding-left: 5px;
 	padding-right: 5px;
+	cursor: default;
 }
 
 .hidden {
@@ -83,6 +84,7 @@ body {
 	margin-top: 2px;
 	padding-left: 5px;
 	padding-right: 5px;
+	cursor: default;
 }
 
 .editTask {
@@ -97,6 +99,7 @@ body {
 	text-align: center;
 	vertical-align: top;
 	margin-top: 2px;
+	cursor: default;
 }
 
 tr:nth-child(even) {

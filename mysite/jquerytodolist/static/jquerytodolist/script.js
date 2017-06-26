@@ -106,6 +106,11 @@ $(document).ready(function() {
                 // all .completeTask (including the new one), and assigns them
                 // "when clicked" action
                 $item.find('.completeTask').click(markAsDoneAction);
+
+                $(".todos")[0].style.display = "block";
+                document.getElementById("headingMakePendingVisible")
+                    .style.display = "none";
+
               }
             });
           });
@@ -135,7 +140,8 @@ $(document).ready(function() {
 
         if (toSearch.includes("<")) {
           alert(
-              "Your item has not been searched for. YOU, however, have been added to the Santa's naughty list");}
+              "Your item has not been searched for. YOU, however, have been added to the Santa's naughty list");
+        }
 
         else {
 
@@ -183,6 +189,7 @@ $(document).ready(function() {
                     $("#addTaskBox").val("");
 
                     $item.find('.completeTask').click(markAsDoneAction);
+                    
 
                   }
                   // if its completed status is true
@@ -209,6 +216,9 @@ $(document).ready(function() {
                           '<td>' + searchResult[i].task_text + '</td></tr>');
                     $(".search_completed_todos").append($item2);
                     $("#addTaskBox").val("");
+
+
+
 
                     $item2.find('.markedAsPurged').click(markAsDoneAction);
                   }
@@ -275,9 +285,6 @@ var markAsDoneAction = function() {
         $(".todos").find('#' + idToComplete).remove();
         $(".search_pending_todos").find('#' + idToComplete).remove();
 
-        if ($(".search_pending_todos")[0].rows.length === 0) {
-          $(".search_pending_todos")[0].style.display = "none";
-
           // I have added deleteSubmission and undoComplete, so we need
           // functions to make those buttons functional immediately
           $item.find('.undoCompleteTask').click(undoDone);
@@ -285,9 +292,19 @@ var markAsDoneAction = function() {
 
           $item.clone().find('.undoCompleteTask').click(undoDone);
           $item.clone().find('.deleteSubmission').click(markedAsPurged);
+
+        if ($(".search_pending_todos")[0].rows.length === 0) {
+          $(".search_pending_todos")[0].style.display = "none";
+
+        if ($(".todos")[0].rows.length === 0) {
+          $(".todos")[0].style.display = "none";
+          document.getElementById("headingMakePendingVisible")
+              .style.display = "block";
+
+
         }
       }
-    });
+  }});
   });
 };
 
@@ -334,6 +351,11 @@ var undoDone = function() {
                       "</tr>");
         $(".todos").append($item);
         $(".search_pending_todo").append($item.clone());
+        
+        $(".todos")[0].style.display = "block";
+        document.getElementById("headingMakePendingVisible")
+            .style.display = "none";        
+        
 
         $("#addTaskBox").val("");
 
