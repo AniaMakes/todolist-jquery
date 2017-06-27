@@ -45,28 +45,31 @@ def index(request):
                     save_submission(content)
 
         # function to mark a task as completed (change Task.completed to True)
-        if (item_value.startswith(complete_prefix)):
-            task_id_str = item_value[len(complete_prefix):]
+        # changed to work with reference in tr only
+        if (item_name.startswith("complete")):
+            task_id_str = item_value
             id_to_complete = int(task_id_str)
             Task.objects.filter(id=id_to_complete).update(completed=True)
 
         # when moving task from pending to completed, this function looks for task_text itself
+        # changed to work with reference in tr only
         if (item_name.startswith("taskNameFetching")):
-            task_id_str = item_value[len(complete_prefix):]
+            task_id_str = item_value
             id_to_complete = int(task_id_str)
             task_text = Task.objects.filter(id=id_to_complete)[0]
             response = HttpResponse(task_text)
             return response
 
         # function to purge items that are in the Completed list
-        if (item_value.startswith(delete_prefix)):
-            task_id_str = item_value[len(delete_prefix):]
+        if (item_name.startswith("purge")):
+            task_id_str = item_value
             id_to_delete = int(task_id_str)
             print(id_to_delete)
             Task.objects.filter(id=id_to_delete).delete()
 
-        if (item_value.startswith(undo_prefix)):
-            task_id_str = item_value[len(undo_prefix):]
+        # changed to work with reference in tr only
+        if (item_name.startswith("undocomplete")):
+            task_id_str = item_value
             id_to_undo = int(task_id_str)
 
             print(id_to_undo)

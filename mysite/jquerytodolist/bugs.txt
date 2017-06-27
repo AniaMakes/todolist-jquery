@@ -24,16 +24,14 @@ NEEDS FIXING:
 
 - display - empty string or table
 
-- one function that inserts a pending task + event listeners, another for inserting completed tasks and implements them (page load, clicking relevant buttons)
-
 - amend search to only use two tables instead of 4
 
 - remove all IDs from HTML, use class instead
 
+
+VIKTOR'S REQUESTS THAT HAVE BEEN IMPLEMENTED
+- one function that inserts a pending task + event listeners, another for inserting completed tasks and implements them (page load, clicking relevant buttons)
 - use jquery to find template (class), clone it 
-
 - on click, find the parent / gparent with a CLASS and use *that* to fetch the task number
-
 - have text field be own class and use that as hook to place actual text
-
 - only one data-id - in the <tr>
