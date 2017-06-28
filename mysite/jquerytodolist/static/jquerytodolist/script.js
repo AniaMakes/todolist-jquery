@@ -38,6 +38,13 @@ $.ajaxSetup({
   }
 });
 
+function showHiddenRows() {
+  $(".todos").find('tr').show();
+  $(".completedtodos").find('tr').show();
+  document.getElementById("clearSearch").style.display = "none";
+  $("#searchTaskBox").val("");
+}
+
 // FUNCTION TO CREATE A ROW IN HTML BY FETCHING & CLONING TEMPLATE FROM HTML
 
 function addARowToPending(text, taskNumber) {
@@ -112,6 +119,7 @@ $(document).ready(function() {
       var toAdd = $('input[name=taskText]').val();
       event.preventDefault();
 
+      showHiddenRows();
       // sends POST request to submit task
 
       if (toAdd !== "") {
@@ -182,10 +190,18 @@ $(document).ready(function() {
 
               // clears removes any search classes from items to stop searches
               // mixing up
+              $(document).ready(function() {
+                $("#clearSearch").click(showHiddenRows);
+              });
+              document.getElementById("clearSearch").style.display =
+                  "inline-block";
 
               // if there is at least one matching result
               if (searchResult.length !== 0) {
                 // for each result
+                $(".todos").find('tr').hide();
+                $(".completedtodos").find('tr').hide();
+
                 for (i = 0; i < searchResult.length; i++) {
                   console.log(searchResult[i]);
 
@@ -198,9 +214,7 @@ $(document).ready(function() {
 
                     // go through todos and find the row with that id and assign
                     // it a class of search result WORKS!
-                    $(".todos")
-                        .find('[data-id="' + taskID + '"]')
-                        .attr("search", "found");
+                    $(".todos").find('[data-id="' + taskID + '"]').show();
 
                     console.log($(".todos").find('[data-id="' + taskID + '"]'));
 
@@ -212,31 +226,11 @@ $(document).ready(function() {
                     // and assign it a class of search result WORKS!
                     $(".completedtodos")
                         .find('[data-id="' + taskID + '"]')
-                        .attr("search", "found");
+                        .show();
 
-                    console.log($(".todos").find('[data-id="' + taskID + '"]'));
+                    console.log($(".completedtodos")
+                                    .find('[data-id="' + taskID + '"]'));
                   }
-
-                //   if a row doesn't have attribute found, hide it
-                    
-                    //run through each row
-                    // $(".todos tr").each(function(i, row){
-                    //     
-                    //     var $row = $(row);)
-                    // }
-                
-                    // $("tr.!search").each(function()
-                
-                    // var blue = $(".todos:not([search])");
-                    // var $table = $(".todos").children(:not([search]););
-                    console.log("blue");
-                
-                    // if ($(".todos").find('[search!="found"]')){
-                    //     
-                    // }
-                  
-                  
-                  $("#addTaskBox").val("");
                 }
               } else {
                 $(".noMatchingTasks")[0].style.display = "table";
@@ -272,11 +266,6 @@ var markAsDoneAction = function() {
 
         $(".completedtodos").find('[data-id="' + taskNumber + '"]').append();
         $(".todos").find('[data-id="' + taskNumber + '"]').remove();
-
-        // I have added deleteSubmission and undoComplete, so we need
-        // functions to make those buttons functional immediately
-        $item.find('.undoCompleteTask').click(undoDone);
-        $item.find('.deleteSubmission').click(markedAsPurged);
 
         // makes todos table invisible if it's empty
         if ($(".todos")[0].rows.length === 0) {

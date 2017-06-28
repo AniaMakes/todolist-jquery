@@ -10,24 +10,22 @@ DELIBERATE BUGS:
 
 NEEDS FIXING:
 - currently empty pending list will not have "No such tasks exist" when empty.
+
 - editing doesn't work
 
 - multiple copies of the same task are merged on reload
 
-- undo button doesn't work for tasks in search
-
-- prettify Search output
-
-- adding task doesn't clear the search
-
 - display - empty string or table
 
-- amend search to only use two tables instead of 4
 
-- remove all IDs from HTML, use class instead
 
 
 VIKTOR'S REQUESTS THAT HAVE BEEN IMPLEMENTED
+- undo button doesn't work for tasks in search
+- prettify Search output
+- adding task doesn't clear the search
+- amend search to only use two tables instead of 4
+- remove all IDs from HTML, use class instead
 - add pointer cursor to buttons
 - one function that inserts a pending task + event listeners, another for inserting completed tasks and implements them (page load, clicking relevant buttons)
 - use jquery to find template (class), clone it 

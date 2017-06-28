@@ -33,6 +33,27 @@ body {
 	cursor: pointer;
 }
 
+#clearSearch {
+	display: none;
+	height: 20px;
+	width: 100px;
+	background-color: #42f4df;
+	font-family: arial;
+	font-size: 80%;
+	color: #000000;
+	border-radius: 5px;
+	text-align: center;
+	vertical-align: top;
+	margin-top: 2px;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
 .completeTask {
 	display: inline-block;
 	height: 20px;
