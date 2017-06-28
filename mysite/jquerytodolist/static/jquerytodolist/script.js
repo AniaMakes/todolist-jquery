@@ -243,6 +243,35 @@ $(document).ready(function() {
   });
 });
 
+// EDITING ------------------------------------------------------------
+
+var editing = function() {
+  var $row = $(this).parents("tr");
+  var taskNumber = $row.attr("data-id");
+  
+  var cellContent = $(this).parent().siblings(":first").text();
+  console.log(cellContent);
+  
+  console.log($(this));
+  
+  // $(this)[0].html("<div class='abandonChanges'");
+  // $row.find(".completeTask")[0].html("<div class='abandonChanges'");
+  
+  $(this)[0].style.display = "none";
+  $row.find(".completeTask")[0].style.display = "none";
+  
+console.log($row.find(".completeTask")[0]);
+
+
+  $(this).parent().siblings(":first").html(
+      "<input type = 'text' name='editTextBox' value='" + cellContent + "'>");
+
+
+
+};
+
+$(document).ready(function() { $(".editTask").click(editing); });
+
 // MARKING TASKS AS COMPLETED ---------------------------------------
 
 var markAsDoneAction = function() {

@@ -125,6 +125,41 @@ body {
 	cursor: pointer;
 }
 
+.submitChanges {
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+	background-color: #1e3f75;
+	font-family: arial;
+	font-size: 80%;
+	color: #ffffff;
+	border-radius: 5px;
+	text-align: center;
+	vertical-align: top;
+	margin-top: 2px;
+	cursor: pointer;
+}
+
+.abandonChanges {
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+	background-color: #328689;
+	font-family: arial;
+	font-size: 80%;
+	color: #ffffff;
+	border-radius: 5px;
+	text-align: center;
+	vertical-align: top;
+	margin-top: 2px;
+	cursor: pointer;
+}
+
+
+
+
+
+
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
