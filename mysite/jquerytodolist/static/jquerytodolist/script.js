@@ -103,14 +103,17 @@ function addARowToCompleted(text, taskNumber) {
 
 // clicking Add a Task adds a task - at the moment assumed not maintained - will
 // be once Enter works fully
-$(document).ready(function() {
-  $('#addTask').click(function() {
-    var toAdd = $('input[name=taskText]').val();
-    $(".todos").append('<div class="item">' + toAdd + '</div>');
-    $.post("/jquerytodolist/", {task_text : $('input[name=taskText]').val()});
-    $('#addTaskBox').val("");
-  });
-});
+// $(document).ready(function() {
+//   $('#addTask').click(function() {
+//     var toAdd = $('input[name=taskText]').val();
+//     $(".todos").append('<div class="item">' + toAdd + '</div>');
+//     $.post("/jquerytodolist/", {
+//         "aim" : "adding",
+//         task_text : $('input[name=taskText]').val()});
+//     
+//     $('#addTaskBox').val("");
+//   });
+// });
 
 // pressing enter when in the addTaskBox adds a task
 $(document).ready(function() {
@@ -132,12 +135,13 @@ $(document).ready(function() {
         } else {
 
           $.post("/jquerytodolist/", {
+             "aim" : "adding",
              submit_task : $("input[name=taskText]").val()
            }).done(function() {
             $.ajax({
               url : "",
               method : "POST",
-              data : "lastIDinDatabase",
+              data : {"aim" : "idFetching"},
               success : function(lastIDinDatabaseReturn) {
 
                 addARowToPending(toAdd, lastIDinDatabaseReturn);
@@ -184,7 +188,9 @@ $(document).ready(function() {
           $.ajax({
             url : "",
             method : "POST",
-            data : {search_tasks : $("input[name=searchText]").val()},
+            data : {
+                "aim" : "searching",
+                search_tasks : $("input[name=searchText]").val()},
             success : function(searchResult) {
               console.log(searchResult);
               console.log(searchResult.length);
@@ -267,7 +273,7 @@ var editing = function() {
       .html("<div class='abandonChanges'>Cancel</div>");
 
   $row.find(".abandonChanges").click(cancelChanges);
-  $row.find("saveChanges").click(saveChagesToTask);
+  $row.find(".saveChanges").click(saveChagesToTask);
 
   console.log($(this));
 
@@ -293,9 +299,32 @@ var cancelChanges = function() {
   $row.find('.editTask').click(editing);
 };
 
-var saveChagesToTask = function(){
-    
-    
+var saveChagesToTask = function() {
+  var $row = $(this).parents("tr");
+  var taskNumber = $row.attr("data-id");
+  
+  var newText = $row.find("[name=editTextBox]").val();
+
+  $row.children(":first").html(newText);
+  
+  // newText & taskNumber
+  
+  $.post("/jquerytodolist/", {
+    'aim':'updatedText',
+    updatedText : newText,
+    taskID : taskNumber
+});
+
+  $($row.find(".abandonChanges")[0])
+      .parent()
+      .html("<div class='completeTask'>&#10004;</div>");
+
+  $($row.find(".saveChanges")[0])
+      .parent()
+      .html("<div class='editTask'>&#10000;</div>");
+
+  $row.find('.completeTask').click(markAsDoneAction);
+  $row.find('.editTask').click(editing);
 };
 
 $(document).ready(function() { $(".editTask").click(editing); });
@@ -307,11 +336,11 @@ var markAsDoneAction = function() {
   var row = $(this).parents("tr");
   var taskNumber = row.attr("data-id");
 
-  $.post("/jquerytodolist/", {"completeIDnr" : taskNumber}).done(function() {
+  $.post("/jquerytodolist/", {"aim": "completing", "completeIDnr" : taskNumber}).done(function() {
     $.ajax({
       url : "",
       method : "POST",
-      data : {"taskNameFetching" : taskNumber},
+      data : {"aim" : "nameFetching", "taskNameFetching" : taskNumber},
       success : function(taskNameFetched) {
         $(".completedtodos")[0].style.display = "table";
         document.getElementById("headingMakeCompletedVisible").style.display =
@@ -348,15 +377,15 @@ var undoDone = function() {
   // removes the row from the completed tasks table
   $(".completedtodos").find('[data-id="' + taskNumber + '"]').remove(); // works
 
-  // updates the database
-  $.post("/jquerytodolist/", {"undocompleteIDnr" : taskNumber});
-
   // make ajax request to fetch the conent of the name part
-  $.post("/jquerytodolist/", {"completeIDnr" : taskNumber}).done(function() {
+  $.post("/jquerytodolist/", {
+      "aim" : "undoing",
+     "undocompleteIDnr" : taskNumber
+   }).done(function() {
     $.ajax({
       url : "",
       method : "POST",
-      data : {"taskNameFetching" : taskNumber},
+      data : {"aim" : "nameFetching", "taskNameFetching" : taskNumber},
       success : function(taskNameFetched) {
 
         addARowToPending(taskNameFetched, taskNumber);
@@ -388,7 +417,9 @@ var markedAsPurged = function() {
   var taskNumber = row.attr("data-id");
 
   // makes the change in the database
-  $.post("/jquerytodolist/", {"purgeIDnr" : taskNumber});
+  $.post("/jquerytodolist/", {
+      "aim" : "purging",
+      "purgeIDnr" : taskNumber});
 
   // removes the row from completedtodos
   $(".completedtodos").find('[data-id="' + taskNumber + '"]').remove();
