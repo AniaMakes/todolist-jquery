@@ -69,6 +69,7 @@ function addARowToPending(text, taskNumber) {
   // all .completeTask (including the new one), and assigns them
   // "when clicked" action
   $editableCopy.find('.completeTask').click(markAsDoneAction);
+  $editableCopy.find('.editTask').click(editing);
 }
 
 function addARowToCompleted(text, taskNumber) {
@@ -245,29 +246,56 @@ $(document).ready(function() {
 
 // EDITING ------------------------------------------------------------
 
+var textMemory = "";
+
 var editing = function() {
   var $row = $(this).parents("tr");
   var taskNumber = $row.attr("data-id");
-  
+
   var cellContent = $(this).parent().siblings(":first").text();
   console.log(cellContent);
-  
-  console.log($(this));
-  
-  // $(this)[0].html("<div class='abandonChanges'");
-  // $row.find(".completeTask")[0].html("<div class='abandonChanges'");
-  
-  $(this)[0].style.display = "none";
-  $row.find(".completeTask")[0].style.display = "none";
-  
-console.log($row.find(".completeTask")[0]);
+  textMemory = cellContent;
 
+  console.log($(this));
 
   $(this).parent().siblings(":first").html(
       "<input type = 'text' name='editTextBox' value='" + cellContent + "'>");
 
+  $(this).parent().html("<div class='saveChanges'>Save</div>");
+  $($row.find(".completeTask")[0])
+      .parent()
+      .html("<div class='abandonChanges'>Cancel</div>");
 
+  $row.find(".abandonChanges").click(cancelChanges);
+  $row.find("saveChanges").click(saveChagesToTask);
 
+  console.log($(this));
+
+};
+
+var cancelChanges = function() {
+  var $row = $(this).parents("tr");
+  var cellContent = $(this).parent().siblings(":first").text();
+  console.log($row);
+  $($row.find(".abandonChanges")[0])
+      .parent()
+      .html("<div class='completeTask'>&#10004;</div>");
+
+  $($row.find(".saveChanges")[0])
+      .parent()
+      .html("<div class='editTask'>&#10000;</div>");
+
+  console.log($row.children(":first"));
+
+  $row.children(":first").html(textMemory);
+
+  $row.find('.completeTask').click(markAsDoneAction);
+  $row.find('.editTask').click(editing);
+};
+
+var saveChagesToTask = function(){
+    
+    
 };
 
 $(document).ready(function() { $(".editTask").click(editing); });
